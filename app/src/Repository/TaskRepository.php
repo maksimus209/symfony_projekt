@@ -33,7 +33,7 @@ class TaskRepository extends ServiceEntityRepository
      *
      * @constant int
      */
-    public const PAGINATOR_ITEMS_PER_PAGE = 3;
+    public const PAGINATOR_ITEMS_PER_PAGE = 10;
 
     /**
      * Constructor.
@@ -48,23 +48,35 @@ class TaskRepository extends ServiceEntityRepository
     /**
      * Query all records.
      *
-     * @return QueryBuilder Query builder
+     * @return \Doctrine\ORM\QueryBuilder Query builder
      */
     public function queryAll(): QueryBuilder
     {
-        return $this->getOrCreateQueryBuilder()
-            ->orderBy('task.updatedAt', 'DESC');
+        // Create or get an existing QueryBuilder instance
+        $queryBuilder = $this->getOrCreateQueryBuilder();
+
+        // Properly set up the query with the correct joins and selections
+        return $this->createQueryBuilder('task')
+            -> select('task', 'category', 'tasks')  // Selects the task and its associated category and tasks
+            -> leftJoin('task.category', 'category') // Joins the Category entity with alias 'category'
+            -> leftJoin('category.tasks', 'tasks')   // Joins the Tasks entity under Category with alias 'tasks'
+            -> orderBy('task.createdAt', 'DESC');    // Orders the result by the creation date of the tasks
     }
 
     /**
      * Get or create new query builder.
      *
-     * @param QueryBuilder|null $queryBuilder Query builder
+     * This utility method ensures there's always a query builder available,
+     * either newly created or passed as an argument.
      *
-     * @return QueryBuilder Query builder
+     * @param QueryBuilder|null $queryBuilder Existing query builder if available
+     *
+     * @return QueryBuilder Newly created or passed query builder
      */
     private function getOrCreateQueryBuilder(?QueryBuilder $queryBuilder = null): QueryBuilder
     {
+        // Use the existing QueryBuilder if provided, otherwise create a new one
         return $queryBuilder ?? $this->createQueryBuilder('task');
     }
+
 }

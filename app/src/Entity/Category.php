@@ -1,58 +1,65 @@
 <?php
 /**
- * Task entity.
+ * Category entity.
  */
 
 namespace App\Entity;
 
-use App\Repository\TaskRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * Class Task.
+ * Class Category.
  *
- * @psalm-suppress MissingConstructor This suppresses Psalm's warning about the missing constructor.
+ * @psalm-suppress MissingConstructor
  */
-#[ORM\Entity(repositoryClass: TaskRepository::class)]
-#[ORM\Table(name: 'tasks')]
-class Task
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ORM\Table(name: 'categories')]
+#[ORM\UniqueConstraint(name: 'uq_categories_title', columns: ['title'])]
+#[UniqueEntity(fields: ['title'])]
+class Category
 {
     /**
      * Primary key.
+     *
+     * @var int|null
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[ORM\OneToMany(mappedBy: "category", targetEntity: Task::class)]
+    private $tasks;
+
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "tasks")]
+    private $category;
+
+
     /**
      * Created at.
      *
-     * @psalm-suppress PropertyNotSetInConstructor This suppresses Psalm's warning about properties not set in the constructor.
+     * @var \DateTimeImmutable|null
      */
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt;
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * Updated at.
      *
-     * @psalm-suppress PropertyNotSetInConstructor This suppresses Psalm's warning about properties not set in the constructor.
+     * @var \DateTimeImmutable|null
      */
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt;
+    private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * Title.
+     *
+     * @var string|null
      */
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $title = null;
-
-    /**
-     * Category.
-     */
-    #[ORM\ManyToOne(targetEntity: Category::class, fetch: 'EXTRA_LAZY')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Category $category = null;
 
     /**
      * Getter for Id.
@@ -122,29 +129,5 @@ class Task
     public function setTitle(?string $title): void
     {
         $this->title = $title;
-    }
-
-    /**
-     * Getter for category.
-     *
-     * @return Category|null Category
-     */
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    /**
-     * Setter for category.
-     *
-     * @param Category|null $category Category
-     *
-     * @return static
-     */
-    public function setCategory(?Category $category): static
-    {
-        $this->category = $category;
-
-        return $this;
     }
 }
