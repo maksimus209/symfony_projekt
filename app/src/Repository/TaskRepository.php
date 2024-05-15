@@ -48,7 +48,7 @@ class TaskRepository extends ServiceEntityRepository
     /**
      * Query all records.
      *
-     * @return \Doctrine\ORM\QueryBuilder Query builder
+     * @return QueryBuilder Query builder
      */
     public function queryAll(): QueryBuilder
     {
@@ -57,10 +57,10 @@ class TaskRepository extends ServiceEntityRepository
 
         // Properly set up the query with the correct joins and selections
         return $this->createQueryBuilder('task')
-            -> select('task', 'category', 'tasks')  // Selects the task and its associated category and tasks
-            -> leftJoin('task.category', 'category') // Joins the Category entity with alias 'category'
-            -> leftJoin('category.tasks', 'tasks')   // Joins the Tasks entity under Category with alias 'tasks'
-            -> orderBy('task.createdAt', 'DESC');    // Orders the result by the creation date of the tasks
+            ->select('task', 'category', 'tasks')  // Selects the task and its associated category and tasks
+            ->leftJoin('task.category', 'category') // Joins the Category entity with alias 'category'
+            ->leftJoin('category.tasks', 'tasks')   // Joins the Tasks entity under Category with alias 'tasks'
+            ->orderBy('task.createdAt', 'DESC');    // Orders the result by the creation date of the tasks
     }
 
     /**
@@ -78,5 +78,4 @@ class TaskRepository extends ServiceEntityRepository
         // Use the existing QueryBuilder if provided, otherwise create a new one
         return $queryBuilder ?? $this->createQueryBuilder('task');
     }
-
 }

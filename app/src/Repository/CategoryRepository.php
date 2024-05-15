@@ -1,5 +1,12 @@
 <?php
 
+/*
+ *
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Category;
@@ -11,6 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
+    /**
+     * CategoryRepository constructor.
+     *
+     * @param ManagerRegistry $registry Manager registry to be used
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);

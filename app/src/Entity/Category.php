@@ -22,41 +22,32 @@ class Category
 {
     /**
      * Primary key.
-     *
-     * @var int|null
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: "category", targetEntity: Task::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class)]
     private $tasks;
 
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "tasks")]
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'tasks')]
     private $category;
-
 
     /**
      * Created at.
-     *
-     * @var \DateTimeImmutable|null
      */
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * Updated at.
-     *
-     * @var \DateTimeImmutable|null
      */
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * Title.
-     *
-     * @var string|null
      */
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $title = null;
