@@ -52,30 +52,24 @@ class TaskRepository extends ServiceEntityRepository
      */
     public function queryAll(): QueryBuilder
     {
-        // Create or get an existing QueryBuilder instance
-        $queryBuilder = $this->getOrCreateQueryBuilder();
-
-        // Properly set up the query with the correct joins and selections
-        return $this->createQueryBuilder('task')
-            ->select('task', 'category', 'tasks')  // Selects the task and its associated category and tasks
-            ->leftJoin('task.category', 'category') // Joins the Category entity with alias 'category'
-            ->leftJoin('category.tasks', 'tasks')   // Joins the Tasks entity under Category with alias 'tasks'
-            ->orderBy('task.createdAt', 'DESC');    // Orders the result by the creation date of the tasks
+        return $this->getOrCreateQueryBuilder()
+            ->select(
+                'partial task.{id, createdAt, updatedAt, title}',
+                'partial category.{id, title}'
+            )
+            ->join('task.category', 'category')
+            ->orderBy('task.updatedAt', 'DESC');
     }
 
     /**
      * Get or create new query builder.
      *
-     * This utility method ensures there's always a query builder available,
-     * either newly created or passed as an argument.
+     * @param QueryBuilder|null $queryBuilder Query builder
      *
-     * @param QueryBuilder|null $queryBuilder Existing query builder if available
-     *
-     * @return QueryBuilder Newly created or passed query builder
+     * @return QueryBuilder Query builder
      */
-    private function getOrCreateQueryBuilder(?QueryBuilder $queryBuilder = null): QueryBuilder
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
     {
-        // Use the existing QueryBuilder if provided, otherwise create a new one
         return $queryBuilder ?? $this->createQueryBuilder('task');
     }
 }
