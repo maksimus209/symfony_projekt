@@ -6,10 +6,8 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Service\TaskService;
 use App\Service\TaskServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,6 +20,8 @@ class TaskController extends AbstractController
 {
     /**
      * Constructor.
+     *
+     * @param TaskServiceInterface $taskService Task service
      */
     public function __construct(private readonly TaskServiceInterface $taskService)
     {
@@ -52,7 +52,7 @@ class TaskController extends AbstractController
     #[Route(
         '/{id}',
         name: 'task_show',
-        requirements: ['id' => '[1-9]\d*'],
+        requirements: ['id' => '[1-9]\\d*'],
         methods: 'GET'
     )]
     public function show(Task $task): Response

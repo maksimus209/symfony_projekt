@@ -26,7 +26,7 @@ class CategoryController extends AbstractController
      * Constructor.
      *
      * @param CategoryServiceInterface $categoryService Category service
-     * @param TranslatorInterface      $translator  Translator
+     * @param TranslatorInterface      $translator      Translator
      */
     public function __construct(private readonly CategoryServiceInterface $categoryService, private readonly TranslatorInterface $translator)
     {
@@ -34,6 +34,8 @@ class CategoryController extends AbstractController
 
     /**
      * Index action.
+     *
+     * @param int $page Page number
      *
      * @return Response HTTP response
      */
@@ -55,7 +57,7 @@ class CategoryController extends AbstractController
     #[Route(
         '/{id}',
         name: 'category_show',
-        requirements: ['id' => '[1-9]\d*'],
+        requirements: ['id' => '[1-9]\\d*'],
         methods: 'GET'
     )]
     public function show(Category $category): Response
@@ -70,11 +72,7 @@ class CategoryController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route(
-        '/create',
-        name: 'category_create',
-        methods: 'GET|POST',
-    )]
+    #[Route('/create', name: 'category_create', methods: 'GET|POST')]
     public function create(Request $request): Response
     {
         $category = new Category();
@@ -94,7 +92,9 @@ class CategoryController extends AbstractController
 
         return $this->render(
             'category/create.html.twig',
-            ['form' => $form->createView()]
+            [
+                'form' => $form->createView(),
+            ]
         );
     }
 
@@ -106,7 +106,7 @@ class CategoryController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/{id}/edit', name: 'category_edit', requirements: ['id' => '[1-9]\d*'], methods: 'GET|PUT')]
+    #[Route('/{id}/edit', name: 'category_edit', requirements: ['id' => '[1-9]\\d*'], methods: 'GET|PUT')]
     public function edit(Request $request, Category $category): Response
     {
         $form = $this->createForm(
@@ -147,7 +147,7 @@ class CategoryController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/{id}/delete', name: 'category_delete', requirements: ['id' => '[1-9]\d*'], methods: 'GET|DELETE')]
+    #[Route('/{id}/delete', name: 'category_delete', requirements: ['id' => '[1-9]\\d*'], methods: 'GET|DELETE')]
     public function delete(Request $request, Category $category): Response
     {
         $form = $this->createForm(FormType::class, $category, [

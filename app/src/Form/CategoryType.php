@@ -3,7 +3,7 @@
  * Category type.
  */
 
-namespace App\Form\Type;
+namespace App\Form;
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
@@ -36,7 +36,8 @@ class CategoryType extends AbstractType
                 'label' => 'label.title',
                 'required' => true,
                 'attr' => ['max_length' => 64],
-            ]);
+            ]
+        );
     }
 
     /**
