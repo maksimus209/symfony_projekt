@@ -5,6 +5,7 @@ parameters:
     - page_title: page title
     - form: form view variable
     - submit_label: label for submit button
+    - method: form method (e.g., 'POST', 'DELETE')
 #}
 {% extends 'base.html.twig' %}
 
@@ -14,7 +15,7 @@ parameters:
 
 {% block body %}
     <h1>{{ page_title }}</h1>
-    {{ form_start(form) }}
+    {{ form_start(form, {'method': method|default('POST')}) }}
     {% if false == form.vars.valid %}
         {% include 'default/_single_alert_message.html.twig' with {
             type: 'danger',
