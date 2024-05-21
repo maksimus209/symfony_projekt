@@ -11,12 +11,14 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Repository\TaskRepository;
 
 /**
  * Class CategoryService.
  */
 class CategoryService implements CategoryServiceInterface
 {
+    private TaskRepository $taskRepository;
     /**
      * Items per page.
      *
@@ -75,5 +77,23 @@ class CategoryService implements CategoryServiceInterface
     public function delete(Category $category): void
     {
         $this->categoryRepository->delete($category);
+    }
+
+    /**
+     * Can Category be deleted?
+     *
+     * @param Category $category Category entity
+     *
+     * @return bool Result
+     */
+    public function canBeDeleted(Category $category): bool
+    {
+        try {
+            $result = $this->taskRepository->countByCategory($category);
+
+            return !($result > 0);
+        } catch (NoResultException|NonUniqueResultException) {
+            return false;
+        }
     }
 }

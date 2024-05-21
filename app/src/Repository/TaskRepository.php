@@ -9,6 +9,7 @@ use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Category;
 
 /**
  * Class TaskRepository.
@@ -59,6 +60,19 @@ class TaskRepository extends ServiceEntityRepository
             )
             ->join('task.category', 'category')
             ->orderBy('task.updatedAt', 'DESC');
+    }
+
+    /**
+     * Count tasks by category.
+     */
+    public function countByCategory(Category $category): int
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->where('t.category = :category')
+            ->setParameter('category', $category);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
