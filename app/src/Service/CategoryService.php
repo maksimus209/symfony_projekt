@@ -19,6 +19,7 @@ use App\Repository\TaskRepository;
 class CategoryService implements CategoryServiceInterface
 {
     private TaskRepository $taskRepository;
+
     /**
      * Items per page.
      *
@@ -35,9 +36,13 @@ class CategoryService implements CategoryServiceInterface
      *
      * @param CategoryRepository $categoryRepository Category repository
      * @param PaginatorInterface $paginator          Paginator
+     * @param TaskRepository     $taskRepository     Task repository
      */
-    public function __construct(private readonly CategoryRepository $categoryRepository, private readonly PaginatorInterface $paginator)
+    public function __construct(CategoryRepository $categoryRepository, PaginatorInterface $paginator, TaskRepository $taskRepository)
     {
+        $this->categoryRepository = $categoryRepository;
+        $this->paginator = $paginator;
+        $this->taskRepository = $taskRepository;
     }
 
     /**

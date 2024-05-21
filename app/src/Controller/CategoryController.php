@@ -124,7 +124,7 @@ class CategoryController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.created_successfully')
+                $this->translator->trans('message.updated_successfully')
             );
 
             return $this->redirectToRoute('category_index');
@@ -147,7 +147,7 @@ class CategoryController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/{id}/delete', name: 'category_delete', requirements: ['id' => '[1-9]\d*'], methods: 'GET|DELETE')]
+    #[Route('/{id}/delete', name: 'category_delete', requirements: ['id' => '[1-9]\\d*'], methods: 'GET|DELETE')]
     public function delete(Request $request, Category $category): Response
     {
         if (!$this->categoryService->canBeDeleted($category)) {

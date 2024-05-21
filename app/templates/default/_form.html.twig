@@ -16,11 +16,14 @@ parameters:
 {% block body %}
     <h1>{{ page_title }}</h1>
     {{ form_start(form, {'method': method|default('POST')}) }}
+    {% if method|default('POST') is not same as('GET') and method|default('POST') is not same as('POST') %}
+        <input type="hidden" name="_method" value="{{ method|default('POST') }}">
+    {% endif %}
     {% if false == form.vars.valid %}
         {% include 'default/_single_alert_message.html.twig' with {
             type: 'danger',
             message: 'message.form_error'|trans,
-        }%}
+        } %}
     {% endif %}
     {{ form_widget(form) }}
     <div class="form-group row float-sm-right">
