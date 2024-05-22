@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tag index{% endblock %}
+
+{% block body %}
+    <h1>Tag index</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tag in tags %}
+            <tr>
+                <td>{{ tag.id }}</td>
+                <td>{{ tag.title }}</td>
+                <td>{{ tag.slug }}</td>
+                <td>
+                    <a href="{{ path('tag_show', {'id': tag.id}) }}">show</a>
+                    <a href="{{ path('tag_edit', {'id': tag.id}) }}">edit</a>
+                    <a href="{{ path('tag_confirm_delete', {'id': tag.id}) }}" class="btn btn-danger">delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tag_create') }}">Create new</a>
+{% endblock %}
