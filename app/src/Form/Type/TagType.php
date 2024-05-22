@@ -9,27 +9,22 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class TagType.
+ * Class TagType
+ * @package App\Form\Type
  */
 class TagType extends AbstractType
 {
     /**
-     * Build the form.
+     * Build the form fields for the Tag entity.
      *
      * @param FormBuilderInterface $builder
      * @param array $options
-     * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Title',
-                'attr' => ['maxlength' => 64],
-            ])
-            ->add('slug', TextType::class, [
-                'label' => 'Slug',
-                'attr' => ['maxlength' => 64],
             ]);
     }
 
@@ -37,7 +32,6 @@ class TagType extends AbstractType
      * Configure the options for this form.
      *
      * @param OptionsResolver $resolver
-     * @return void
      */
     public function configureOptions(OptionsResolver $resolver): void
     {

@@ -2,50 +2,52 @@
 
 namespace App\Entity;
 
+use App\Repository\TagRepository;
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
 class Tag
 {
     /**
-     * @var int|null
-     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @var int|null
      */
-    private $id;
+    private ?int $id;
 
     /**
-     * @var \DateTimeInterface
-     *
      * @ORM\Column(type="datetime")
+     *
+     * @var DateTime
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
-     * @var \DateTimeInterface
-     *
      * @ORM\Column(type="datetime")
+     *
+     * @var DateTime
      */
-    private $updatedAt;
+    private DateTime $updatedAt;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", length=64, unique=true)
      *
-     * @ORM\Column(type="string", length=64)
+     * @var string
      */
-    private $slug;
+    private string $slug;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string", length=64)
+     *
+     * @var string
      */
-    private $title;
+    private string $title;
 
     /**
      * Get the value of id
@@ -60,78 +62,39 @@ class Tag
     /**
      * Get the value of createdAt
      *
-     * @return \DateTimeInterface|null
+     * @return DateTime
      */
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * Set the value of createdAt
-     *
-     * @param \DateTimeInterface $createdAt
-     * @return self
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
      * Get the value of updatedAt
      *
-     * @return \DateTimeInterface|null
+     * @return DateTime
      */
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
     /**
-     * Set the value of updatedAt
-     *
-     * @param \DateTimeInterface $updatedAt
-     * @return self
-     */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
      * Get the value of slug
      *
-     * @return string|null
+     * @return string
      */
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
     /**
-     * Set the value of slug
-     *
-     * @param string $slug
-     * @return self
-     */
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
      * Get the value of title
      *
-     * @return string|null
+     * @return string
      */
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -145,35 +108,36 @@ class Tag
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
+        $this->slug = $this->generateSlug($title);
         return $this;
     }
 
     /**
-     * Updates timestamps before persisting or updating the entity
-     *
      * @ORM\PrePersist
-     * @ORM\PreUpdate
      */
-    public function updateTimestamps()
+    public function onPrePersist(): void
     {
-        if ($this->getCreatedAt() === null) {
-            $this->setCreatedAt(new \DateTimeImmutable());
-        }
-        $this->setUpdatedAt(new \DateTimeImmutable());
-
-        // Generate slug based on title
-        $this->setSlug($this->generateSlug($this->getTitle()));
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+        $this->slug = $this->generateSlug($this->title);
     }
 
     /**
-     * Generate slug from title
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new DateTime();
+    }
+
+    /**
+     * Generate a URL-friendly slug from the title
      *
      * @param string $title
      * @return string
      */
     private function generateSlug(string $title): string
     {
-        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title)));
+        return strtolower(preg_replace('/[^a-z0-9]+/i', '-', trim($title)));
     }
 }

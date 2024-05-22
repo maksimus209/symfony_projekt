@@ -7,13 +7,8 @@
 
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">Save</button>
+    <button class="btn">{{ button_label|default('Update') }}</button>
     {{ form_end(form) }}
 
     <a href="{{ path('tag_index') }}">back to list</a>
-
-    <form method="post" action="{{ path('tag_delete', {'id': tag.id}) }}" style="display:inline-block">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tag.id) }}">
-        <button class="btn">delete</button>
-    </form>
 {% endblock %}

@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Tag</h1>
 
-    <table>
+    <table class="table">
         <tbody>
         <tr>
             <th>Id</th>
@@ -19,10 +19,23 @@
             <th>Slug</th>
             <td>{{ tag.slug }}</td>
         </tr>
+        <tr>
+            <th>Created At</th>
+            <td>{{ tag.createdAt ? tag.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Updated At</th>
+            <td>{{ tag.updatedAt ? tag.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
         </tbody>
     </table>
 
     <a href="{{ path('tag_index') }}">back to list</a>
+
     <a href="{{ path('tag_edit', {'id': tag.id}) }}">edit</a>
-    <a href="{{ path('tag_confirm_delete', {'id': tag.id}) }}" class="btn btn-danger">delete</a>
+
+    <form method="post" action="{{ path('tag_delete', {'id': tag.id}) }}" style="display: inline-block">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tag.id) }}">
+        <button class="btn btn-danger">delete</button>
+    </form>
 {% endblock %}

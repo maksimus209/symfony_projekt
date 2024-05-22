@@ -6,32 +6,46 @@ use App\Entity\Tag;
 
 /**
  * Interface TagServiceInterface
- *
  * @package App\Service
  */
 interface TagServiceInterface
 {
     /**
-     * Create a new Tag.
+     * Create a new tag.
      *
      * @param Tag $tag
-     * @return void
+     * @return Tag
      */
-    public function create(Tag $tag): void;
+    public function createTag(Tag $tag): Tag;
 
     /**
-     * Update an existing Tag.
+     * Update an existing tag.
      *
      * @param Tag $tag
-     * @return void
+     * @return Tag
      */
-    public function update(Tag $tag): void;
+    public function updateTag(Tag $tag): Tag;
 
     /**
-     * Delete a Tag.
+     * Delete a tag.
      *
      * @param Tag $tag
      * @return void
      */
-    public function delete(Tag $tag): void;
+    public function deleteTag(Tag $tag): void;
+
+    /**
+     * Get a tag by its ID.
+     *
+     * @param int $id
+     * @return Tag|null
+     */
+    public function getTagById(int $id): ?Tag;
+
+    /**
+     * Get all tags.
+     *
+     * @return Tag[]
+     */
+    public function getAllTags(): array;
 }
